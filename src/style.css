@@ -62,11 +62,13 @@ span {
     font-weight: 900;
 }
 
-.projects {
+.projects,
+.new-project-div {
     width: 90%;
     padding: 10px;
     display: flex;
     flex-direction: column;
+    height: fit-content;
 }
 
 i.fa-solid {
@@ -74,7 +76,48 @@ i.fa-solid {
     margin-right: 5px;
 }
 
+input,  
+.btn-container {
+    width: 90%;
+    height: fit-content;
+}
+input.project-name{
+    color: black;
+    border-radius: 5px;
+    color: black;
+    height: 25px;
+    font-size: 16px;
+}
 
+.btn-container{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+.new-project-div{
+    display: none;
+}
+.addBtn, 
+.cancelBtn {
+    width: 47%;
+    border-radius: 5px;
+    padding: 5px;
+    text-align: center;
+    font-weight: 900;
+    border: 1px solid black;
+}
+
+.addBtn:hover,
+.cancelBtn:hover {
+    opacity: 0.8;
+}
+
+.addBtn {
+    background-color: rgb(76, 187, 76);
+}
+.cancelBtn {
+    background-color: #F76C6C;
+}
 /* Container styling */
 
 .container {
