@@ -7,6 +7,31 @@
     <title>Todo list</title>
 </head>
 <body>
+
+    <div id="overlay"></div>
+    <div id="login">
+        <button id="cross">&cross;</button>
+        <h2>New Todo</h2>
+        <form class="form">
+            <input type="text" placeholder="Title" name="title" id="title" minlength="3" required/>
+            <input type="text" placeholder="Description" name="description" id="description"/>
+            <div class="formholder">
+                <label for='dueDate'>Due Date:</label>
+                <input type="date" id="dueDate" name="dueDate"/>
+            </div>
+            <div class="formholder">
+                <input type="checkbox" id="read" name="read">
+                <label for="read" class="read">Have you done the todo?</label><br><br>               
+            </div>
+            <label for="projects-available">Choose project:</label>
+            <input list="projects-available" name="projects-available"> 
+            <datalist id="projects-available">
+                
+            </datalist>
+            <input type="submit" value="Add todo" id="submit"/>
+        </form>
+</div>
+
     <div class="header">
         <span>Todo list</span>
     </div>

@@ -3,13 +3,13 @@
 *{
     margin: 0;
     box-sizing: border-box;
-    width: 100%;
     height: 100%;
     
 }
 
 body {
     font-family: 'Lora', serif;
+    position: relative;
     display: grid;
     height: 100%;
     width: 100%;
@@ -63,6 +63,10 @@ button:active {
     cursor: pointer;
 }
 
+.clickedbutton {
+    background-color: #24305E;
+}
+
 span {
     font-weight: 900;
     width: fit-content;
@@ -90,7 +94,7 @@ i.fa-solid {
 }
 input,  
 .btn-container {
-    width: 90%;
+    width: 100%;
     height: fit-content;
 }
 input.project-name{
@@ -155,6 +159,7 @@ input.project-name{
     font-size: 22px;
 }
 
+
 .new-todo {
     width: 150px;
     font-size: 19px;
@@ -164,13 +169,14 @@ input.project-name{
     color: black;
     font-weight: 800;
     height: fit-content;
+    margin-bottom: 10px;
 }
 
 .one-todo {
     display: grid;
-    grid-template-columns: 20px 260px 150px 20px;
+    grid-template-columns: 25px 260px 150px 20px;
     justify-content: space-around;
-    width: 470px;
+    width: 475px;
     height: 40px;
     padding: 10px;
 }
@@ -198,13 +204,158 @@ input.project-name{
 }
 
 input[type="checkbox"] {
-    width: fit-content;
-    height: 20px;
+    height: 17px;
     border-radius: 50%;
+}
+
+input[type="checkbox"]:hover {
+    cursor: pointer;
 }
 
 input[type="date"] {
     width: fit-content;
     border: none;
     background-color: transparent;
+}
+
+/* Overlay Styling */
+#overlay {
+    position: fixed; /* Sit on top of the page content */
+    display: none; /* Hidden by default */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.7); /* Black background with opacity */
+    z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+    cursor: pointer; /* Add a pointer on hover */
+  }
+  
+  #login{
+      background-color: #374785;
+      width: 400px;
+      height: fit-content;
+      margin: auto;
+      border: 3px solid var(--secondary-color);
+    color: var(--secondary-color);
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      position: fixed;
+    font-weight:600;
+       right: 0;
+    left: 0;
+    top:calc(50vh - 150px) !important;
+    margin: auto;
+    z-index: 3;
+ 
+  }
+
+  h2 {
+    height: fit-content;
+    margin-bottom: 20px;
+    color: whitesmoke;
+    margin-top: 15px;
+  }
+  .form {
+    height: auto;
+    color: whitesmoke;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .form input {
+    margin-bottom: 10px;
+  }
+
+  #submit {
+    background-color: #F76C6C;
+    width: 50%;
+    font-size: 20px;
+    padding: 10px;
+    border-radius: 10px;
+    color: whitesmoke;
+    font-weight: 800;
+    align-self: center;
+  }
+  #overlay,#login{display: none;}
+  
+  #cross{
+      position: absolute;
+      right: 20px;
+      color: whitesmoke;
+      width: fit-content;
+      top: 0px;
+      font-size: 22px;
+      font-weight: bold;
+      background-color: transparent;
+      border: 0
+  }
+
+  #cross:hover {
+    color: #F76C6C
+  }
+
+  input#dueDate {
+    width: auto;
+    background-color:whitesmoke;
+    margin-bottom: 0;
+  }
+  input#read {
+    margin-bottom: 0;
+  }
+  
+  .formholder {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  label {
+    margin-right: 10px; 
+  }
+
+  label.read {
+    margin-left: 10px;
+  }
+
+  input#title,
+  input#description,
+  input#dueDate {
+    padding: 5px;
+    border-radius: 5px;
+  }
+
+  datalist {
+    position: absolute;
+    background-color: white;
+    border: 1px solid blue;
+    border-radius: 0 0 5px 5px;
+    border-top: none;
+    font-family: sans-serif;
+    width: 350px;
+    padding: 5px;
+    max-height: 10rem;
+    overflow-y: auto
+    
+  }
+  
+  option {
+    width: 100%;
+    background-color: white;
+    padding: 4px;
+    color: blue;
+    margin-bottom: 1px;
+     font-size: 18px;
+    cursor: pointer;
+  }
+
+.todo-done {
+    text-decoration: line-through;
+    text-decoration-color: #F76C6C;
+    text-decoration-thickness: 3px;
+    opacity: 0.7;
 }

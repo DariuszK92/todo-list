@@ -13,23 +13,26 @@ let todoList = [
     {
         title: 'Play Sport',
         description: 'Play football with friends in the part',
-        dueDate: '2023-02-03',
+        dueDate: '2023-04-07',
         priority: 'green',
-        project: 'daro'
+        project: 'daro',
+        done: 'false'
     },
     {
         title: 'clean bathroom',
         description: 'Play football with friends in the part',
-        dueDate: '2024-02-03',
+        dueDate: '2023-04-13',
         priority: 'green',
-        project: 'daro'
+        project: 'daro',
+        done: 'true'
     },
     {
         title: 'make makeup',
         description: 'Play football with friends in the part',
         dueDate: '2024-02-03',
         priority: 'green',
-        project: 'other'
+        project: 'other',
+        done: 'false'
     }
 
 ];
@@ -43,15 +46,17 @@ let projectList = [
 
 // TODO PREPARATION
 
-function todosFactory(title, description, dueDate,priority,project) {
+function todosFactory(title, description, dueDate,priority,project, done) {
     return {
         title,
         description,
         dueDate,
         priority,
-        project
+        project,
+        done
     }
 };
+
 
 // PROJECT PREPARATION
 
@@ -129,12 +134,20 @@ projectContainer.addEventListener("click", function(e){
 
   function showAllTodos() {
     const todoContainer = document.querySelector('.todos');
-
+    while (todoContainer.firstChild) {
+        todoContainer.removeChild(todoContainer.lastChild);
+      }
     for(let i=0; i<todoList.length;i++) {
         const oneTodo = document.createElement('div');
         oneTodo.classList.add('one-todo');
+        if(todoList[i].done === 'true'){
+            oneTodo.classList.add('todo-done');
+        }
         const todoCheckbox = document.createElement('input');
         todoCheckbox.type = 'checkbox';
+        if(todoList[i].done === 'true'){
+            todoCheckbox.checked = true;
+        }
         const todoTitle = document.createElement('span');
         todoTitle.textContent = todoList[i].title;
         const todoDate = document.createElement('input');
@@ -157,20 +170,26 @@ projectContainer.addEventListener("click", function(e){
 
   //Show project specific todos
 
-  function showProjectTodos() {
+  
 
-    
-  }
-
-
+const titleOfProject = document.querySelector('.title-of-project')
 
   projectContainer.addEventListener("click", function(e){
     const target = e.target.closest("button").innerText;
+    const target2 = e.target.closest("button");
+    const allButtons = document.querySelectorAll("button");
+    allButtons.forEach((element) => {
+        element.classList.remove('clickedbutton');
+      });
+    target2.classList.add('clickedbutton');
+    titleOfProject.textContent=target;
     const todoContainer = document.querySelector('.todos');
     if(target === "All projects") {
+       
         while (todoContainer.firstChild) {
             todoContainer.removeChild(todoContainer.lastChild);
           }
+         
         showAllTodos();
     } else{
         while (todoContainer.firstChild) {
@@ -181,8 +200,14 @@ projectContainer.addEventListener("click", function(e){
                 const todoContainer = document.querySelector('.todos');
                 const oneTodo = document.createElement('div');
                 oneTodo.classList.add('one-todo');
+                if(todoList[i].done === 'true'){
+                    oneTodo.classList.add('todo-done');
+                }
                 const todoCheckbox = document.createElement('input');
                 todoCheckbox.type = 'checkbox';
+                if(todoList[i].done === 'true'){
+                    todoCheckbox.checked=true;
+                }
                 const todoTitle = document.createElement('span');
                 todoTitle.textContent = todoList[i].title;
                 const todoDate = document.createElement('input');
@@ -206,3 +231,230 @@ projectContainer.addEventListener("click", function(e){
     
 }
   });
+
+  //Adding todo
+  const addButton = document.querySelector('.new-todo');
+
+
+
+
+const overlay = document.querySelector('#overlay');
+const cross = document.querySelector('#cross');
+
+
+
+function closeOverlay() {
+    overlay.style.display = 'none';
+    login.style.display = 'none';
+}
+cross.addEventListener('click', closeOverlay);
+overlay.addEventListener('click', closeOverlay);
+
+
+const availableProjects = document.querySelector('#projects-available')
+
+
+addButton.addEventListener('click', () => {
+    overlay.style.display = 'block';
+    login.style.display = 'block';
+    while (availableProjects.firstChild) {
+        availableProjects.removeChild(availableProjects.lastChild);
+      }
+    projectList.forEach(project => {
+        var option = document.createElement("option");
+        option.value = project.name;
+        option.innerHTML = project.name;
+        availableProjects.appendChild(option);
+      });
+});
+
+
+//Adding new todo to the array
+const formEl = document.querySelector('.form');
+const submitTodo = document.querySelector('#submit');
+
+
+function addNewTodo(event){
+    event.preventDefault();
+    const formData = new FormData(formEl);
+    let title = formData.get('title');
+    
+    const found = todoList.some(el => el.title === title);
+    if(found){
+        alert("Todo already exists!");
+        closeOverlay();
+    } else {
+    let description = formData.get('description');
+    let dueDate = formData.get('dueDate')
+    let project = formData.get('projects-available');
+    console.log(formData.get('read'))
+    if (formData.get('read') === null) {
+        let newTodo = todosFactory(title,description,dueDate, 'green',project,'false')
+        todoList.push(newTodo);
+    } else {
+        let newTodo = todosFactory(title,description,dueDate, 'green',project, 'true')
+        todoList.push(newTodo);
+    }
+
+    closeOverlay();
+    showAllTodos();
+    formEl.reset();  
+    }
+}
+
+submitTodo.addEventListener('click', addNewTodo);
+
+
+// Removing todo
+
+const todoContainer = document.querySelector('.todos');
+
+todoContainer.addEventListener("click", function(e){
+    const target = e.target.closest(".fa-trash"); 
+    if(target){
+     const toRemove = target.parentNode.innerText;        
+    todoList = todoList.filter(function( obj ) {
+    return obj.title !== toRemove;
+    });
+          showAllTodos();
+    }
+  });
+
+
+todoContainer.addEventListener("click", function(e){
+    const target = e.target.closest("input");
+    if(target){
+       if(target.parentNode.classList.contains('todo-done')){
+       target.parentNode.classList.remove('todo-done')
+
+       const toChange = target.parentNode.innerText;        
+       for (var i=0; i<todoList.length; i++) {
+           if (todoList[i].title == toChange){
+               todoList[i].done = 'false'
+           };
+         }
+    } else {
+        target.parentNode.classList.add('todo-done');
+
+        const toChange = target.parentNode.innerText;        
+        for (var i=0; i<todoList.length; i++) {
+            if (todoList[i].title == toChange){
+                todoList[i].done = 'true'
+            };
+          }
+         
+         
+    }
+
+    }
+  });
+
+
+  // Selecting by the date today
+
+  const todayBtn = document.querySelector('.today');
+
+  function selectTodayTodos(){
+    const todayDate = new Date();
+    let day = todayDate.getDate().toString().padStart(2, "0");
+    let month = (todayDate.getMonth() + 1).toString().padStart(2, "0");
+    let year = todayDate.getFullYear();
+
+    // This arrangement can be altered based on how we want the date's format to appear.
+    let currentDate = `${year}-${month}-${day}`;
+    while (todoContainer.firstChild) {
+        todoContainer.removeChild(todoContainer.lastChild);
+      }
+    for(let i=0;i<todoList.length;i++){
+
+        if(todoList[i].dueDate == currentDate){
+            const todoContainer = document.querySelector('.todos');
+            const oneTodo = document.createElement('div');
+            oneTodo.classList.add('one-todo');
+            if(todoList[i].done === 'true'){
+                oneTodo.classList.add('todo-done');
+            }
+            const todoCheckbox = document.createElement('input');
+            todoCheckbox.type = 'checkbox';
+            if(todoList[i].done === 'true'){
+                todoCheckbox.checked=true;
+            }
+            const todoTitle = document.createElement('span');
+            todoTitle.textContent = todoList[i].title;
+            const todoDate = document.createElement('input');
+            todoDate.type = 'date';
+            todoDate.value = todoList[i].dueDate;
+    
+            let removeIcon = document.createElement('i');
+                removeIcon.classList.add('fa-solid');
+                removeIcon.classList.add('fa-trash');
+            
+            oneTodo.appendChild(todoCheckbox);
+            oneTodo.appendChild(todoTitle);
+            oneTodo.appendChild(todoDate);
+            oneTodo.appendChild(removeIcon);
+            todoContainer.appendChild(oneTodo);
+        }
+    }
+  }
+
+  todayBtn.addEventListener('click', selectTodayTodos)
+
+    // Selecting by the date this week
+
+    const weekBtn = document.querySelector('.week');
+
+  function selectWeekTodos(){
+    const todayDate = new Date();
+    let day = todayDate.getDate().toString().padStart(2, "0");
+    let month = (todayDate.getMonth() + 1).toString().padStart(2, "0");
+    let year = todayDate.getFullYear();
+
+    // This arrangement can be altered based on how we want the date's format to appear.
+    let currentDate = `${year}-${month}-${day}`;
+
+    const nextWeek= new Date()
+    nextWeek.setDate(nextWeek.getDate()+7);
+    let day2 = nextWeek.getDate().toString().padStart(2, "0");
+    let month2 = (nextWeek.getMonth() + 1).toString().padStart(2, "0");
+    let year2 = nextWeek.getFullYear();
+
+    let nextWeekDate = `${year2}-${month2}-${day2}`;
+
+
+    while (todoContainer.firstChild) {
+        todoContainer.removeChild(todoContainer.lastChild);
+      }
+    for(let i=0;i<todoList.length;i++){
+        if(todoList[i].dueDate >= currentDate && todoList[i].dueDate <= nextWeekDate){
+            const todoContainer = document.querySelector('.todos');
+            const oneTodo = document.createElement('div');
+            oneTodo.classList.add('one-todo');
+            if(todoList[i].done === 'true'){
+                oneTodo.classList.add('todo-done');
+            }
+            const todoCheckbox = document.createElement('input');
+            todoCheckbox.type = 'checkbox';
+            if(todoList[i].done === 'true'){
+                todoCheckbox.checked=true;
+            }
+            const todoTitle = document.createElement('span');
+            todoTitle.textContent = todoList[i].title;
+            const todoDate = document.createElement('input');
+            todoDate.type = 'date';
+            todoDate.value = todoList[i].dueDate;
+    
+            let removeIcon = document.createElement('i');
+                removeIcon.classList.add('fa-solid');
+                removeIcon.classList.add('fa-trash');
+            
+            oneTodo.appendChild(todoCheckbox);
+            oneTodo.appendChild(todoTitle);
+            oneTodo.appendChild(todoDate);
+            oneTodo.appendChild(removeIcon);
+            todoContainer.appendChild(oneTodo);
+        }
+    }
+  }
+
+  weekBtn.addEventListener('click', selectWeekTodos)
