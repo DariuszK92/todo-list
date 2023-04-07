@@ -143,6 +143,7 @@ input.project-name{
     grid-area: cont;
     background-color: #A8D0E6;
     display: grid;
+    
     grid-template-rows: 80px 1fr;
 }
 
@@ -167,16 +168,26 @@ input.project-name{
 
 .one-todo {
     display: grid;
-    grid-template-columns: 20px 210px 150px 20px;
+    grid-template-columns: 20px 260px 150px 20px;
     justify-content: space-around;
-    width: 400px;
-    height: 30px;
+    width: 470px;
+    height: 40px;
+    padding: 10px;
+}
+
+.one-todo:hover {
+    background-color: rgba(55, 71, 133, 0.6);
+    cursor: pointer;
+    border-radius: 10px;
 }
 
 .todos {
     margin-top: 30px;
     align-items: center;
     display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-left: 30px;
     flex-direction: column;
     height: auto;
     color: black;

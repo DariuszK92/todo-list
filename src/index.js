@@ -23,6 +23,13 @@ let todoList = [
         dueDate: '2024-02-03',
         priority: 'green',
         project: 'daro'
+    },
+    {
+        title: 'make makeup',
+        description: 'Play football with friends in the part',
+        dueDate: '2024-02-03',
+        priority: 'green',
+        project: 'other'
     }
 
 ];
@@ -92,11 +99,17 @@ cancelProjectBtn.addEventListener('click', closeProjectInput)
 function addNewProject() {
     const projectInput = document.querySelector('.project-name')
     let projectName = projectInput.value;
+    const found = projectList.some(el => el.name === projectName);
+    if(!found){
     let newProject = projectFactory(projectName);
     projectList.push(newProject);
     projectInput.value='';
     closeProjectInput();
     showProjects();  
+    } else {
+        alert("Project already exists!");
+        closeProjectInput();
+    }
 }
 
 addProjectBtn.addEventListener('click', addNewProject)
@@ -141,3 +154,55 @@ projectContainer.addEventListener("click", function(e){
   }
 
   showAllTodos();
+
+  //Show project specific todos
+
+  function showProjectTodos() {
+
+    
+  }
+
+
+
+  projectContainer.addEventListener("click", function(e){
+    const target = e.target.closest("button").innerText;
+    const todoContainer = document.querySelector('.todos');
+    if(target === "All projects") {
+        while (todoContainer.firstChild) {
+            todoContainer.removeChild(todoContainer.lastChild);
+          }
+        showAllTodos();
+    } else{
+        while (todoContainer.firstChild) {
+            todoContainer.removeChild(todoContainer.lastChild);
+          }
+        for(let i=0; i<todoList.length;i++) {
+            if(todoList[i].project == target){
+                const todoContainer = document.querySelector('.todos');
+                const oneTodo = document.createElement('div');
+                oneTodo.classList.add('one-todo');
+                const todoCheckbox = document.createElement('input');
+                todoCheckbox.type = 'checkbox';
+                const todoTitle = document.createElement('span');
+                todoTitle.textContent = todoList[i].title;
+                const todoDate = document.createElement('input');
+                todoDate.type = 'date';
+                todoDate.value = todoList[i].dueDate;
+        
+                let removeIcon = document.createElement('i');
+                    removeIcon.classList.add('fa-solid');
+                    removeIcon.classList.add('fa-trash');
+                
+                oneTodo.appendChild(todoCheckbox);
+                oneTodo.appendChild(todoTitle);
+                oneTodo.appendChild(todoDate);
+                oneTodo.appendChild(removeIcon);
+                todoContainer.appendChild(oneTodo);
+        } 
+        else {
+            
+        }
+    }
+    
+}
+  });
