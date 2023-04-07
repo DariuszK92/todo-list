@@ -10,6 +10,7 @@
     <div class="header">
         <span>Todo list</span>
     </div>
+   
     <div class="nav">
         <button class="today">
             <i class="fa-solid fa-calendar-day">
@@ -23,7 +24,11 @@
         </button>
 
         <div class="projects">
-            <span>Projects</span>
+          <span>Projects <i class="fa-solid fa-rectangle-vertical-history"></i></span>
+         
+        </div>
+        <div class="project-list">
+        
         </div>
         <div class="new-project-div">
             <input type="text" min="1" class="project-name"/>
@@ -35,8 +40,13 @@
         <button id="newProject">+New project</button>
         
     </div>
+    <!-- Container for Todos-->
     <div class="container">
-
+        <div class="title">
+            <p class="title-of-project">All projects</p>
+            <button class="new-todo">+New todo</button>
+        </div>
+        <div class="todos"></div>
     </div>
 
    

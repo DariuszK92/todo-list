@@ -5,13 +5,14 @@
     box-sizing: border-box;
     width: 100%;
     height: 100%;
-    color: whitesmoke;
+    
 }
 
 body {
     font-family: 'Lora', serif;
     display: grid;
     height: 100%;
+    width: 100%;
     grid-template-rows: 70px 1fr;
     grid-template-columns: 220px 1fr;
     grid-template-areas: 
@@ -24,6 +25,7 @@ body {
     font-family: 'Pacifico', cursive;
     grid-area: hd;
     padding-left: 15px;
+    color: whitesmoke;
 }
 
 /* Navigation styling */
@@ -37,33 +39,39 @@ body {
     border-radius: 5px;
     padding-top: 30px;
     font-size: 20px;
+    color: whitesmoke;
    
 }
 
 button {
     font-family: 'Lora', serif;
     font-size: 16px;
-background-color: #374785;
-border-radius: 10px;
- width: 90%;
- text-align: left;
- height: auto;
- padding: 10px;
- border: none;
-
+    background-color: #374785;
+    border-radius: 10px;
+    width: 90%;
+    text-align: left;
+    height: auto;
+    padding: 10px;
+    border: none;
+    color: whitesmoke;
+    cursor: pointer;
 }
 
 button:hover,
 button:active {
     background-color: #24305E;
+    cursor: pointer;
 }
 
 span {
     font-weight: 900;
+    width: fit-content;
+    height: fit-content;
 }
 
 .projects,
-.new-project-div {
+.new-project-div,
+.project-list {
     width: 90%;
     padding: 10px;
     display: flex;
@@ -74,8 +82,12 @@ span {
 i.fa-solid {
     display: inline;
     margin-right: 5px;
+    width: fit-content;
+    height: fit-content;
 }
-
+.fa-trash:hover {
+    color: #F76C6C;
+}
 input,  
 .btn-container {
     width: 90%;
@@ -118,9 +130,70 @@ input.project-name{
 .cancelBtn {
     background-color: #F76C6C;
 }
+
+.project-list > button {
+    display: flex;
+    align-content: space-between;
+    justify-content: space-between;
+}
 /* Container styling */
+
 
 .container {
     grid-area: cont;
     background-color: #A8D0E6;
+    display: grid;
+    grid-template-rows: 80px 1fr;
+}
+
+.title {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+    margin-top: 10px;
+    font-size: 22px;
+}
+
+.new-todo {
+    width: 150px;
+    font-size: 19px;
+}
+
+.title-of-project {
+    color: black;
+    font-weight: 800;
+    height: fit-content;
+}
+
+.one-todo {
+    display: grid;
+    grid-template-columns: 20px 210px 150px 20px;
+    justify-content: space-around;
+    width: 400px;
+    height: 30px;
+}
+
+.todos {
+    margin-top: 30px;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    color: black;
+}
+
+.todos > span {
+    color: black;
+}
+
+input[type="checkbox"] {
+    width: fit-content;
+    height: 20px;
+    border-radius: 50%;
+}
+
+input[type="date"] {
+    width: fit-content;
+    border: none;
+    background-color: transparent;
 }
