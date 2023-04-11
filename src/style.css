@@ -73,6 +73,20 @@ span {
     height: fit-content;
 }
 
+.todoinfo {
+    color: whitesmoke;
+    margin-right: 10px;
+}
+
+.info-container {
+    display: flex;
+    flex-direction: column;
+    gap:15px;
+    justify-content: flex-start;
+    align-items: flex-start;
+  
+}
+
 .projects,
 .new-project-div,
 .project-list {
@@ -233,7 +247,8 @@ input[type="date"] {
     cursor: pointer; /* Add a pointer on hover */
   }
   
-  #login{
+  #login,
+  #info{
       background-color: #374785;
       width: 400px;
       height: fit-content;
@@ -281,7 +296,7 @@ input[type="date"] {
     font-weight: 800;
     align-self: center;
   }
-  #overlay,#login{display: none;}
+  #overlay,#login, #info{display: none;}
   
   #cross{
       position: absolute;
@@ -358,4 +373,10 @@ input[type="date"] {
     text-decoration-color: #F76C6C;
     text-decoration-thickness: 3px;
     opacity: 0.7;
+}
+
+.wide {
+    display:inline-block;
+    width:110px;
+    text-align: start;
 }

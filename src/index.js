@@ -10,31 +10,7 @@ const cancelProjectBtn = document.querySelector('.cancelBtn');
 
 
 let todoList = [
-    {
-        title: 'Play Sport',
-        description: 'Play football with friends in the part',
-        dueDate: '2023-04-07',
-        priority: 'green',
-        project: 'daro',
-        done: 'false'
-    },
-    {
-        title: 'clean bathroom',
-        description: 'Play football with friends in the part',
-        dueDate: '2023-04-13',
-        priority: 'green',
-        project: 'daro',
-        done: 'true'
-    },
-    {
-        title: 'make makeup',
-        description: 'Play football with friends in the part',
-        dueDate: '2024-02-03',
-        priority: 'green',
-        project: 'other',
-        done: 'false'
-    }
-
+        
 ];
 let projectList = [
     {
@@ -246,6 +222,7 @@ const cross = document.querySelector('#cross');
 function closeOverlay() {
     overlay.style.display = 'none';
     login.style.display = 'none';
+    todoInfo.style.display = "none";
 }
 cross.addEventListener('click', closeOverlay);
 overlay.addEventListener('click', closeOverlay);
@@ -296,6 +273,15 @@ function addNewTodo(event){
         todoList.push(newTodo);
     }
 
+    const firstChild = document.querySelector('.project-list').firstElementChild;
+
+    const allButtons = document.querySelectorAll("button");
+    allButtons.forEach((element) => {
+        element.classList.remove('clickedbutton');
+      });
+      
+      firstChild.classList.add('clickedbutton');
+      titleOfProject.innerText="All projects"
     closeOverlay();
     showAllTodos();
     formEl.reset();  
@@ -322,7 +308,7 @@ todoContainer.addEventListener("click", function(e){
 
 
 todoContainer.addEventListener("click", function(e){
-    const target = e.target.closest("input");
+    const target = e.target.closest('input[type=checkbox]');
     if(target){
        if(target.parentNode.classList.contains('todo-done')){
        target.parentNode.classList.remove('todo-done')
@@ -396,13 +382,18 @@ todoContainer.addEventListener("click", function(e){
             todoContainer.appendChild(oneTodo);
         }
     }
+    const allButtons = document.querySelectorAll("button");
+    allButtons.forEach((element) => {
+        element.classList.remove('clickedbutton');
+      });
+      todayBtn.classList.add('clickedbutton')
   }
 
   todayBtn.addEventListener('click', selectTodayTodos)
 
     // Selecting by the date this week
 
-    const weekBtn = document.querySelector('.week');
+const weekBtn = document.querySelector('.week');
 
   function selectWeekTodos(){
     const todayDate = new Date();
@@ -455,6 +446,66 @@ todoContainer.addEventListener("click", function(e){
             todoContainer.appendChild(oneTodo);
         }
     }
+    const allButtons = document.querySelectorAll("button");
+    allButtons.forEach((element) => {
+        element.classList.remove('clickedbutton');
+      });
+      weekBtn.classList.add('clickedbutton')
   }
 
-  weekBtn.addEventListener('click', selectWeekTodos)
+  weekBtn.addEventListener('click', selectWeekTodos);
+
+
+  // Checking description of Todo
+
+
+  const todoCheck = document.querySelector('.todos');
+  const todoInfo = document.querySelector('#info');
+  const todoTitle= document.querySelector('#todo-title');
+  const todoDescription= document.querySelector('#todo-description');
+  const todoDuedate= document.querySelector('#todo-duedate');
+  const todoProject= document.querySelector('#todo-project');
+  const todoStatus= document.querySelector('#todo-status');
+
+  
+
+function showTodoDetails(e) {
+    let todoName = e.target.innerText;
+    for(let i=0; i<todoList.length;i++){
+        while(todoList[i].title==todoName){
+            overlay.style.display ="block";
+            todoInfo.style.display = "block";
+            todoTitle.innerText = todoList[i].title;
+            todoDescription.innerText = todoList[i].description;
+            todoDuedate.innerText = todoList[i].dueDate;
+            todoProject.innerText = todoList[i].project;
+            if(todoList[i].done=='true'){
+                todoStatus.innerText = "Done!"
+            }
+            else {
+                todoStatus.innerText = "Not done"
+            }
+            return;
+        }
+    }
+
+};
+
+todoCheck.addEventListener('click', showTodoDetails);
+
+
+// Change the date
+
+
+todoContainer.addEventListener('change', (e)=> {
+   if(e.target.type == 'date'){
+    let currentProject = e.target.parentNode.innerText;
+  
+    for(let i=0; i<todoList.length;i++){
+        while(todoList[i].title==currentProject){
+           todoList[i].dueDate = e.target.value;
+            return;
+        }
+    }
+   }
+})
