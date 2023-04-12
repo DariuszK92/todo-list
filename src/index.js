@@ -9,6 +9,29 @@ const addProjectBtn = document.querySelector('.addBtn');
 const cancelProjectBtn = document.querySelector('.cancelBtn');
 
 
+
+// Setting factories and arrays for Todo list and project list creation and storage
+
+window.onload = function() {
+    let storedTodos = JSON.parse(localStorage.getItem('todos'));
+    let storedProjects = JSON.parse(localStorage.getItem('projects'));
+    if(storedTodos.length>0){
+        for(let i=0;i<storedTodos.length;i++){
+            todoList.push(storedTodos[i]);
+        
+        }
+    }
+    if(storedProjects.length>0){
+    for(let i=1;i<storedProjects.length;i++){
+        projectList.push(storedProjects[i]); 
+    }
+}
+showAllTodos();
+showProjects();
+}
+
+
+
 let todoList = [
         
 ];
@@ -18,9 +41,6 @@ let projectList = [
         removable: false
     }
 ];
-
-
-// TODO PREPARATION
 
 function todosFactory(title, description, dueDate,priority,project, done) {
     return {
@@ -33,12 +53,11 @@ function todosFactory(title, description, dueDate,priority,project, done) {
     }
 };
 
-
-// PROJECT PREPARATION
-
 const projectFactory = (name, removable = true) =>{
     return {name, removable};
 };
+
+// Showing input for new project adding
 
 function showProjectForm() {
     newProjectBtn.style.display = 'none';
@@ -87,10 +106,13 @@ function addNewProject() {
     projectInput.value='';
     closeProjectInput();
     showProjects();  
+    localStorage.setItem('projects', JSON.stringify(projectList));
     } else {
         alert("Project already exists!");
         closeProjectInput();
     }
+ 
+   
 }
 
 addProjectBtn.addEventListener('click', addNewProject)
@@ -102,43 +124,56 @@ projectContainer.addEventListener("click", function(e){
         projectList = projectList.filter(function( obj ) {
             return obj.name !== toRemove;
           });
+          localStorage.setItem('projects', JSON.stringify(projectList));
           showProjects();
     }
+   
   });
 
-  //Add new Todo
+  //Function removing all current todos from UI, before loading new
 
-  function showAllTodos() {
+  function removeTodoUi() {
     const todoContainer = document.querySelector('.todos');
     while (todoContainer.firstChild) {
         todoContainer.removeChild(todoContainer.lastChild);
       }
-    for(let i=0; i<todoList.length;i++) {
-        const oneTodo = document.createElement('div');
-        oneTodo.classList.add('one-todo');
-        if(todoList[i].done === 'true'){
-            oneTodo.classList.add('todo-done');
-        }
-        const todoCheckbox = document.createElement('input');
-        todoCheckbox.type = 'checkbox';
-        if(todoList[i].done === 'true'){
-            todoCheckbox.checked = true;
-        }
-        const todoTitle = document.createElement('span');
-        todoTitle.textContent = todoList[i].title;
-        const todoDate = document.createElement('input');
-        todoDate.type = 'date';
-        todoDate.value = todoList[i].dueDate;
+  }
 
-        let removeIcon = document.createElement('i');
-            removeIcon.classList.add('fa-solid');
-            removeIcon.classList.add('fa-trash');
-           
-        oneTodo.appendChild(todoCheckbox);
-        oneTodo.appendChild(todoTitle);
-        oneTodo.appendChild(todoDate);
-        oneTodo.appendChild(removeIcon);
-        todoContainer.appendChild(oneTodo);
+  //Function creating UI for all todos
+
+  function createTodoUi(i) {
+    const oneTodo = document.createElement('div');
+    oneTodo.classList.add('one-todo');
+    if(todoList[i].done === 'true'){
+    oneTodo.classList.add('todo-done');
+    }
+    const todoCheckbox = document.createElement('input');
+    todoCheckbox.type = 'checkbox';
+    if(todoList[i].done === 'true'){
+    todoCheckbox.checked = true;
+    }
+    const todoTitle = document.createElement('span');
+    todoTitle.textContent = todoList[i].title;
+    const todoDate = document.createElement('input');
+    todoDate.type = 'date';
+    todoDate.value = todoList[i].dueDate;
+
+    let removeIcon = document.createElement('i');
+    removeIcon.classList.add('fa-solid');
+    removeIcon.classList.add('fa-trash');
+    oneTodo.appendChild(todoCheckbox);
+    oneTodo.appendChild(todoTitle);
+    oneTodo.appendChild(todoDate);
+    oneTodo.appendChild(removeIcon);
+    todoContainer.appendChild(oneTodo);
+  }  
+
+  //Add new Todo
+
+  function showAllTodos() {
+    removeTodoUi();
+    for(let i=0; i<todoList.length;i++) {
+        createTodoUi(i);
     }
   }
 
@@ -161,44 +196,13 @@ const titleOfProject = document.querySelector('.title-of-project')
     titleOfProject.textContent=target;
     const todoContainer = document.querySelector('.todos');
     if(target === "All projects") {
-       
-        while (todoContainer.firstChild) {
-            todoContainer.removeChild(todoContainer.lastChild);
-          }
-         
+        removeTodoUi();         
         showAllTodos();
     } else{
-        while (todoContainer.firstChild) {
-            todoContainer.removeChild(todoContainer.lastChild);
-          }
+        removeTodoUi();
         for(let i=0; i<todoList.length;i++) {
             if(todoList[i].project == target){
-                const todoContainer = document.querySelector('.todos');
-                const oneTodo = document.createElement('div');
-                oneTodo.classList.add('one-todo');
-                if(todoList[i].done === 'true'){
-                    oneTodo.classList.add('todo-done');
-                }
-                const todoCheckbox = document.createElement('input');
-                todoCheckbox.type = 'checkbox';
-                if(todoList[i].done === 'true'){
-                    todoCheckbox.checked=true;
-                }
-                const todoTitle = document.createElement('span');
-                todoTitle.textContent = todoList[i].title;
-                const todoDate = document.createElement('input');
-                todoDate.type = 'date';
-                todoDate.value = todoList[i].dueDate;
-        
-                let removeIcon = document.createElement('i');
-                    removeIcon.classList.add('fa-solid');
-                    removeIcon.classList.add('fa-trash');
-                
-                oneTodo.appendChild(todoCheckbox);
-                oneTodo.appendChild(todoTitle);
-                oneTodo.appendChild(todoDate);
-                oneTodo.appendChild(removeIcon);
-                todoContainer.appendChild(oneTodo);
+                createTodoUi(i);
         } 
         else {
             
@@ -264,7 +268,6 @@ function addNewTodo(event){
     let description = formData.get('description');
     let dueDate = formData.get('dueDate')
     let project = formData.get('projects-available');
-    console.log(formData.get('read'))
     if (formData.get('read') === null) {
         let newTodo = todosFactory(title,description,dueDate, 'green',project,'false')
         todoList.push(newTodo);
@@ -272,6 +275,8 @@ function addNewTodo(event){
         let newTodo = todosFactory(title,description,dueDate, 'green',project, 'true')
         todoList.push(newTodo);
     }
+    localStorage.setItem('todos', JSON.stringify(todoList));
+
 
     const firstChild = document.querySelector('.project-list').firstElementChild;
 
@@ -302,6 +307,7 @@ todoContainer.addEventListener("click", function(e){
     todoList = todoList.filter(function( obj ) {
     return obj.title !== toRemove;
     });
+    localStorage.setItem('todos', JSON.stringify(todoList));
           showAllTodos();
     }
   });
@@ -329,9 +335,10 @@ todoContainer.addEventListener("click", function(e){
             };
           }
          
+
          
     }
-
+    localStorage.setItem('todos', JSON.stringify(todoList));
     }
   });
 
@@ -348,38 +355,11 @@ todoContainer.addEventListener("click", function(e){
 
     // This arrangement can be altered based on how we want the date's format to appear.
     let currentDate = `${year}-${month}-${day}`;
-    while (todoContainer.firstChild) {
-        todoContainer.removeChild(todoContainer.lastChild);
-      }
+    removeTodoUi();
     for(let i=0;i<todoList.length;i++){
 
         if(todoList[i].dueDate == currentDate){
-            const todoContainer = document.querySelector('.todos');
-            const oneTodo = document.createElement('div');
-            oneTodo.classList.add('one-todo');
-            if(todoList[i].done === 'true'){
-                oneTodo.classList.add('todo-done');
-            }
-            const todoCheckbox = document.createElement('input');
-            todoCheckbox.type = 'checkbox';
-            if(todoList[i].done === 'true'){
-                todoCheckbox.checked=true;
-            }
-            const todoTitle = document.createElement('span');
-            todoTitle.textContent = todoList[i].title;
-            const todoDate = document.createElement('input');
-            todoDate.type = 'date';
-            todoDate.value = todoList[i].dueDate;
-    
-            let removeIcon = document.createElement('i');
-                removeIcon.classList.add('fa-solid');
-                removeIcon.classList.add('fa-trash');
-            
-            oneTodo.appendChild(todoCheckbox);
-            oneTodo.appendChild(todoTitle);
-            oneTodo.appendChild(todoDate);
-            oneTodo.appendChild(removeIcon);
-            todoContainer.appendChild(oneTodo);
+            createTodoUi(i);
         }
     }
     const allButtons = document.querySelectorAll("button");
@@ -413,37 +393,10 @@ const weekBtn = document.querySelector('.week');
     let nextWeekDate = `${year2}-${month2}-${day2}`;
 
 
-    while (todoContainer.firstChild) {
-        todoContainer.removeChild(todoContainer.lastChild);
-      }
+    removeTodoUi();
     for(let i=0;i<todoList.length;i++){
         if(todoList[i].dueDate >= currentDate && todoList[i].dueDate <= nextWeekDate){
-            const todoContainer = document.querySelector('.todos');
-            const oneTodo = document.createElement('div');
-            oneTodo.classList.add('one-todo');
-            if(todoList[i].done === 'true'){
-                oneTodo.classList.add('todo-done');
-            }
-            const todoCheckbox = document.createElement('input');
-            todoCheckbox.type = 'checkbox';
-            if(todoList[i].done === 'true'){
-                todoCheckbox.checked=true;
-            }
-            const todoTitle = document.createElement('span');
-            todoTitle.textContent = todoList[i].title;
-            const todoDate = document.createElement('input');
-            todoDate.type = 'date';
-            todoDate.value = todoList[i].dueDate;
-    
-            let removeIcon = document.createElement('i');
-                removeIcon.classList.add('fa-solid');
-                removeIcon.classList.add('fa-trash');
-            
-            oneTodo.appendChild(todoCheckbox);
-            oneTodo.appendChild(todoTitle);
-            oneTodo.appendChild(todoDate);
-            oneTodo.appendChild(removeIcon);
-            todoContainer.appendChild(oneTodo);
+            createTodoUi(i);
         }
     }
     const allButtons = document.querySelectorAll("button");
@@ -456,8 +409,7 @@ const weekBtn = document.querySelector('.week');
   weekBtn.addEventListener('click', selectWeekTodos);
 
 
-  // Checking description of Todo
-
+  // Checking details of todos onclick
 
   const todoCheck = document.querySelector('.todos');
   const todoInfo = document.querySelector('#info');
@@ -466,8 +418,6 @@ const weekBtn = document.querySelector('.week');
   const todoDuedate= document.querySelector('#todo-duedate');
   const todoProject= document.querySelector('#todo-project');
   const todoStatus= document.querySelector('#todo-status');
-
-  
 
 function showTodoDetails(e) {
     let todoName = e.target.innerText;
@@ -496,16 +446,24 @@ todoCheck.addEventListener('click', showTodoDetails);
 
 // Change the date
 
-
 todoContainer.addEventListener('change', (e)=> {
    if(e.target.type == 'date'){
     let currentProject = e.target.parentNode.innerText;
-  
     for(let i=0; i<todoList.length;i++){
         while(todoList[i].title==currentProject){
            todoList[i].dueDate = e.target.value;
+           localStorage.setItem('todos', JSON.stringify(todoList));
+
             return;
         }
     }
    }
 })
+
+
+// Local storage of all the data 
+
+
+
+
+
